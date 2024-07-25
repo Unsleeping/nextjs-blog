@@ -116,14 +116,14 @@ export const generateStaticParams = async () => {
       fields: ["slug"],
     });
 
-    const params = categories?.data?.map((category) => {
+    const params = categories?.data?.map((category: any) => {
       return {
         category: category.slug as string,
         lang: "en",
       };
     });
 
-    const localisedParams = categories?.data?.map((category) => {
+    const localisedParams = categories?.data?.map((category: any) => {
       return {
         category: category.slug as string,
         lang: "de",

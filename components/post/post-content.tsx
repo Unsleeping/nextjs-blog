@@ -1,7 +1,7 @@
 import { getDictionary } from "@/lib/getDictionary";
 import { getReadingTime, getRelativeDate } from "@/lib/helpers";
 import { Post } from "@/types/collection";
-import { ArrowRight } from "lucide-react";
+// import { ArrowRight } from "lucide-react";
 
 interface PostContentProps {
   post: Post;
@@ -55,7 +55,8 @@ const PostContent = async ({
       {/* Read More */}
       {!isPostPage && (
         <div className="flex items-center gap-2 pt-3">
-          {dictionary.buttons.readMore} <ArrowRight size="14" />
+          {dictionary.buttons.readMore}
+          {/* <ArrowRight size="14" /> */}
         </div>
       )}
     </div>

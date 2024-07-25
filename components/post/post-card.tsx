@@ -31,12 +31,11 @@ const PostCard = ({
           reverse ? "md:order-last" : ""
         }`}
         alt={post.title}
-        src={`${process.env.NEXT_PUBLIC_ASSETS_URL}${post.image}?key=optimised`}
+        src={`${process.env.NEXT_PUBLIC_ASSETS_URL}${post.image}`}
         width={600}
         height={300}
       />
       {/* Post Content */}
-      {/* @ts-expect-error Async Server Component */}
       <PostContent locale={locale} post={post} />
     </Link>
   );
