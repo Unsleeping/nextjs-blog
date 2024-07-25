@@ -1,7 +1,7 @@
 import parse, { Element } from "html-react-parser";
 import Image from "next/image";
 
-const PostBody = ({ body }: { body: string }) => {
+const getParsedHTML = (body: string) => {
   const options = {
     replace: (domNode: any) => {
       if (domNode instanceof Element && domNode.attribs) {
@@ -21,10 +21,10 @@ const PostBody = ({ body }: { body: string }) => {
     },
   };
 
-  const getParsedHTML = (body: string) => {
-    return parse(body, options);
-  };
+  return parse(body, options);
+};
 
+const PostBody = ({ body }: { body: string }) => {
   return <div className="rich-text">{getParsedHTML(body)}</div>;
 };
 
