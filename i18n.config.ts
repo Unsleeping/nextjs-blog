@@ -1,9 +1,11 @@
+export type Locale = "en" | "ru";
+
 interface I18nConfig {
-  defaultLocale: string;
-  locales: string[];
+  defaultLocale: Locale;
+  locales: Locale[];
 }
 
 export const i18n: I18nConfig = {
-  defaultLocale: "en",
-  locales: ["en", "de"],
+  defaultLocale: "ru",
+  locales: ["en", "ru"],
 };
