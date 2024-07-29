@@ -1,8 +1,9 @@
 import PaddingContainer from "@/components/layout/padding-container";
 import PostList from "@/components/post/post-lists";
 import directus from "@/lib/directus";
+import { translatedCategories } from "@/lib/filters";
 import { getCategoryData } from "@/lib/helpers";
-import { Post } from "@/types/collection";
+import { Post, RequestedCategory } from "@/types/collection";
 import { notFound } from "next/navigation";
 
 // Generate Metadata Function
@@ -46,13 +47,6 @@ export const generateMetadata = async ({
 };
 
 export const generateStaticParams = async () => {
-  // This for DUMMY DATA Approach
-  /* return DUMMY_CATEGORIES.map((category) => {
-    return {
-      category: category.slug,
-    };
-  }); */
-
   try {
     const categories = await directus.items("category").readByQuery({
       filter: {
@@ -60,25 +54,32 @@ export const generateStaticParams = async () => {
           _eq: "published",
         },
       },
-      fields: ["slug"],
+      fields: [
+        "slug",
+        "translations.title",
+        "translations.description",
+        "translations.languages_code",
+      ],
     });
 
-    const params = categories?.data?.map((category: any) => {
+    const params = categories?.data?.map((category: RequestedCategory) => {
       return {
-        category: category.slug as string,
+        category: category.slug,
         lang: "ru",
       };
     });
 
     // todo: map to all locales
-    const localisedParams = categories?.data?.map((category: any) => {
-      return {
-        category: category.slug as string,
-        lang: "en",
-      };
-    });
+    const localizedParams = categories?.data
+      ?.filter(translatedCategories)
+      .map((category: RequestedCategory) => {
+        return {
+          category: category.slug,
+          lang: "en",
+        };
+      });
 
-    const allParams = params?.concat(localisedParams ?? []);
+    const allParams = params?.concat(localizedParams ?? []);
     return allParams || [];
   } catch (error) {
     console.log(error);

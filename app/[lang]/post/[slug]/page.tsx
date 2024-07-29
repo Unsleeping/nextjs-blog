@@ -5,8 +5,10 @@ import PostBody from "@/components/post/post-body";
 import PostHero from "@/components/post/post-hero";
 import siteConfig from "@/config/site";
 import directus from "@/lib/directus";
+import { translatedCategories } from "@/lib/filters";
 import { getDictionary } from "@/lib/getDictionary";
 import { getPostData } from "@/lib/helpers";
+import { RequestedPost } from "@/types/collection";
 import { notFound } from "next/navigation";
 
 // Generate Metadata Function
@@ -51,11 +53,6 @@ export const generateMetadata = async ({
 
 // Generate Static Params Function
 export const generateStaticParams = async () => {
-  /* return DUMMY_POSTS.map((post) => {
-    return {
-      slug: post.slug,
-    };
-  }); */
   try {
     const posts = await directus.items("post").readByQuery({
       filter: {
@@ -63,23 +60,30 @@ export const generateStaticParams = async () => {
           _eq: "published",
         },
       },
-      fields: ["slug"],
+      fields: [
+        "slug",
+        "translations.title",
+        "translations.description",
+        "translations.languages_code",
+      ],
     });
 
-    const params = posts?.data?.map((post) => {
+    const params = posts?.data?.map((post: RequestedPost) => {
       return {
-        slug: post.slug as string,
+        slug: post.slug,
         lang: "ru",
       };
     });
 
     // todo: map to all locales
-    const localisedParams = posts?.data?.map((post) => {
-      return {
-        slug: post.slug as string,
-        lang: "en",
-      };
-    });
+    const localisedParams = posts?.data
+      ?.filter(translatedCategories)
+      .map((post: RequestedPost) => {
+        return {
+          slug: post.slug,
+          lang: "en",
+        };
+      });
 
     // Concat Localised and Regular Params
     const allParams = params?.concat(localisedParams ?? []);
