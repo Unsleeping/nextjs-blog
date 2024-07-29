@@ -19,7 +19,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const generateMetadata = async ({
   params: { lang },
 }: {
-  params: { lang: Locale };
+  params: { lang: string };
 }) => {
   // Get the Dicitionary based on Lang
   const dicitionary = await getDictionary(lang);
@@ -49,7 +49,7 @@ export const generateMetadata = async ({
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}`,
       languages: {
         "en-US": `${process.env.NEXT_PUBLIC_SITE_URL}/en`,
-        ru: `${process.env.NEXT_PUBLIC_SITE_URL}/ru`,
+        "ru-RU": `${process.env.NEXT_PUBLIC_SITE_URL}/ru`,
       },
     },
     /* Verification for Google Search Console */

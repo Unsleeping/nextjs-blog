@@ -1,62 +1,9 @@
 import PaddingContainer from "@/components/layout/padding-container";
 import PostList from "@/components/post/post-lists";
 import directus from "@/lib/directus";
+import { getCategoryData } from "@/lib/helpers";
 import { Post } from "@/types/collection";
 import { notFound } from "next/navigation";
-import { cache } from "react";
-
-// Get Category Data
-export const getCategoryData = cache(
-  async (categorySlug: string, locale: string) => {
-    try {
-      const category = await directus.items("category").readByQuery({
-        filter: {
-          slug: {
-            _eq: categorySlug,
-          },
-        },
-        fields: [
-          "*",
-          "translations.*",
-          "posts.*",
-          "posts.author.id",
-          "posts.author.first_name",
-          "posts.author.last_name",
-          "posts.category.id",
-          "posts.category.title",
-          "posts.translations.*",
-        ],
-      });
-
-      if (locale === "en") {
-        return category?.data?.[0];
-      } else {
-        const fetchedCategory = category?.data?.[0];
-        const localisedCategory = {
-          ...fetchedCategory,
-          title: fetchedCategory.translations[0].title,
-          description: fetchedCategory.translations[0].description,
-          posts: fetchedCategory.posts.map((post: any) => {
-            return {
-              ...post,
-              title: post.translations[0].title,
-              description: post.translations[0].description,
-              body: post.translations[0].body,
-              category: {
-                ...post.category,
-                title: fetchedCategory.translations[0].title,
-              },
-            };
-          }),
-        };
-        return localisedCategory;
-      }
-    } catch (error) {
-      console.log(error);
-      throw new Error("Error fetching category");
-    }
-  }
-);
 
 // Generate Metadata Function
 export const generateMetadata = async ({
@@ -92,7 +39,7 @@ export const generateMetadata = async ({
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${category}`,
       languages: {
         "en-US": `${process.env.NEXT_PUBLIC_SITE_URL}/en/${category}`,
-        "de-DE": `${process.env.NEXT_PUBLIC_SITE_URL}/de/${category}`,
+        "ru-RU": `${process.env.NEXT_PUBLIC_SITE_URL}/ru/${category}`,
       },
     },
   };
@@ -119,14 +66,15 @@ export const generateStaticParams = async () => {
     const params = categories?.data?.map((category: any) => {
       return {
         category: category.slug as string,
-        lang: "en",
+        lang: "ru",
       };
     });
 
+    // todo: map to all locales
     const localisedParams = categories?.data?.map((category: any) => {
       return {
         category: category.slug as string,
-        lang: "de",
+        lang: "en",
       };
     });
 

@@ -6,53 +6,8 @@ import PostHero from "@/components/post/post-hero";
 import siteConfig from "@/config/site";
 import directus from "@/lib/directus";
 import { getDictionary } from "@/lib/getDictionary";
+import { getPostData } from "@/lib/helpers";
 import { notFound } from "next/navigation";
-import { cache } from "react";
-
-// Get Post Data
-export const getPostData = cache(async (postSlug: string, locale: string) => {
-  try {
-    const post = await directus.items("post").readByQuery({
-      filter: {
-        slug: {
-          _eq: postSlug,
-        },
-      },
-      fields: [
-        "*",
-        "category.id",
-        "category.title",
-        "auhtor.id",
-        "author.first_name",
-        "author.last_name",
-        "translations.*",
-        "category.translations.*",
-      ],
-    });
-
-    const postData = post?.data?.[0];
-
-    if (locale === "en") {
-      return postData;
-    } else {
-      const localisedPostData = {
-        ...postData,
-        title: postData?.translations?.[0]?.title,
-        description: postData?.translations?.[0]?.description,
-        body: postData?.translations?.[0]?.body,
-        category: {
-          ...postData?.category,
-          title: postData?.category?.translations?.[0]?.title,
-        },
-      };
-
-      return localisedPostData;
-    }
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error fetching post");
-  }
-});
 
 // Generate Metadata Function
 export const generateMetadata = async ({
@@ -88,7 +43,7 @@ export const generateMetadata = async ({
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/post/${slug}`,
       languages: {
         "en-US": `${process.env.NEXT_PUBLIC_SITE_URL}/en/post/${slug}`,
-        "de-DE": `${process.env.NEXT_PUBLIC_SITE_URL}/de/post/${slug}`,
+        "ru-RU": `${process.env.NEXT_PUBLIC_SITE_URL}/ru/post/${slug}`,
       },
     },
   };
@@ -114,14 +69,15 @@ export const generateStaticParams = async () => {
     const params = posts?.data?.map((post) => {
       return {
         slug: post.slug as string,
-        lang: "en",
+        lang: "ru",
       };
     });
 
+    // todo: map to all locales
     const localisedParams = posts?.data?.map((post) => {
       return {
         slug: post.slug as string,
-        lang: "de",
+        lang: "en",
       };
     });
 

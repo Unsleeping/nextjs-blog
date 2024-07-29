@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LangSwitcher = ({ locale }: { locale: string }) => {
-  const targetLanguage = locale === "en" ? "de" : "en";
+  const targetLanguage = locale === "en" ? "ru" : "en";
   const pathname = usePathname();
   const redirectTarget = () => {
     if (!pathname) return "/";
@@ -18,7 +18,7 @@ const LangSwitcher = ({ locale }: { locale: string }) => {
       locale={targetLanguage}
       href={redirectTarget()}
     >
-      <span>{targetLanguage === "en" ? "🇬🇧" : "🇩🇪"}</span>
+      <span>{targetLanguage === "en" ? "🇬🇧" : "🇷🇺"}</span>
       {targetLanguage.toUpperCase()}
     </Link>
   );

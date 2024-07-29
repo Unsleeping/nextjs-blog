@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${baseURL}/en/blog/${post.slug}`,
         lastModified: new Date(post.date_updated),
       },
+      // TODO
       {
         url: `${baseURL}/de/blog/${post.slug}`,
         lastModified: new Date(post.date_updated),
@@ -37,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${baseURL}/en/${category.slug}`,
         lastModified: new Date(),
       },
+      // TODO
       {
         url: `${baseURL}/de/${category.slug}`,
         lastModified: new Date(),
@@ -59,6 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseURL}/en`,
       lastModified: new Date(),
     },
+    // TODO
     {
       url: `${baseURL}/de`,
       lastModified: new Date(),

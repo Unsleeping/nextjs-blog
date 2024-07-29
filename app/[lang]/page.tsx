@@ -22,9 +22,10 @@ const getAllPosts = async (locale: string) => {
     });
     console.log(posts);
 
-    if (locale === "en") {
+    if (locale === "ru") {
       return posts.data;
     } else {
+      // TODO: change to find
       const localisedPosts = posts.data?.map((post: any) => {
         return {
           ...post,
